@@ -12,7 +12,6 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 
 from pathlib import Path
 import os
-from decouple import config
 
 import dj_database_url
 
@@ -22,9 +21,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
-'django-insecure-wpw9$h6%lmd7147k*$#1=cj%59&$m-t_snc8h%(pf=d4ux5gak'
+
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = config('SECRET_KEY')
+SECRET_KEY = os.environ.get('django-insecure-wpw9$h6%lmd7147k*$#1=cj%59&$m-t_snc8h%(pf=d4ux5gak')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
@@ -142,6 +141,6 @@ AUTH_USER_MODEL = 'user.User'
 
 
 # Heroku: Update database configuration from $DATABASE_URL.
-import dj_database_url
+
 db_from_env = dj_database_url.config(conn_max_age=500)
 DATABASES['default'].update(db_from_env)
