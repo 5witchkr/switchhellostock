@@ -1,0 +1,1 @@
+web: gunicorn sttalk.wsgi --log-file -

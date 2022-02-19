@@ -1,0 +1,300 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    {% load static %}
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 구글 머티리얼 아이콘 -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <!-- Google Fonts-->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Jua&family=Sunflower:wght@500&display=swap" rel="stylesheet">
+    <style>body, h1, h2, h3, h4, h5, h6, p, span {font-family: 'Sunflower'!important;}</style>
+    <!-- jquery 사용 -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+    <style>
+          .modal_overlay {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        left: 0;
+        top: 0;
+        display: none;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        background: rgba(0, 0, 0, 0.8);
+        backdrop-filter: blur(1.5px);
+        -webkit-backdrop-filter: blur(1.5px);
+    }
+    .modal_window {
+        background: #eeeeee;
+        backdrop-filter: blur(13.5px);
+        -webkit-backdrop-filter: blur(13.5px);
+        border-radius: 10px;
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        width: 800px;
+        height: 600px;
+        position: relative;
+        padding: 10px;
+    }
+
+    </style>
+    <title>Hello, Stock!</title>
+  </head>
+  <body>
+  <div style="display: flex; flex-direction: row; justify-content: center; background-color:#D8D2CB">
+    <div style=" width: 800px; overflow:hidden; min-height:1000px; height:auto; text-align: center;background-color:#eeeeee">
+      <nav class="navbar navbar-light bg-light">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="main0">Hello,Stock!</a>
+          <form action="/user/logout" method="post" class="d-flex">
+            <button type="button" class="btn btn-outline-dark" id="add_content" style="font-size: 20px">토론방 만들기</button>
+            <div style="margin-left:10px"></div>
+            <button type="submit" class="btn btn-outline-dark" value="POST">Logout</button>
+          </form>
+        </div>
+      </nav>
+      <div style="margin-top:20px">
+      </div>
+      <img src="https://cdn.pixabay.com/photo/2020/01/22/22/19/interests-4786422_960_720.jpg" style="border-radius: 3em; width:50%;">
+      <h1>Hello, Stock!</h1>
+      <div style="margin-top:20px">
+      </div>
+<div class="row row-cols-1 row-cols-md-3 g-4">
+  {% for Content in ContentList %}
+  <div class="col">
+    <div class="card" style="border-radius: 1em">
+      <a href="detail{{ Content.id }}">
+      <img src="{% get_media_prefix %}{{ Content.image }}" class="card-img-top"></a>
+      <div class="card-body">
+        <h5 class="card-title" >{{ Content.title }}</h5>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+    </div>
+  </div>
+  <div style="display: flex; flex-direction: row; justify-content: center; background-color:#D8D2CB">
+    <div style=" width: 800px; overflow:hidden; height:auto; text-align: center;background-color:#eeeeee">
+  <div style="display: flex; flex-direction: row; justify-content: center;">
+        <nav aria-label="Page navigation example">
+          <ul class="pagination">
+            <li class="page-item"><a class="page-link" href="main{{ prepage }}" style="color:black" }>이전 페이지</a></li>
+            {% if isLastPage != True %}
+            <li class="page-item"><a class="page-link" style="color:black">{{ page }} 페이지</a></li>
+            <li class="page-item"><a class="page-link" href="main{{ nextpage }}" style="color:black">다음 페이지</a></li>
+            {% else %}
+            <li class="page-item"><a class="page-link" style="color:black">{{ page }} 마지막</a></li>
+            <li class="page-item"><a class="page-link" href="main{{ nextpage }}" style="color:black">페이지입니다.</a></li>
+            {% endif %}
+          </ul>
+        </nav>
+      </div>
+      </div>
+  </div>
+
+
+  <!-- 모달 1 -->
+  <div id="first_modal" class="modal_overlay">
+    <div class="modal_window">
+      <div style="display:flex; fex-direction: row; justify-content: space-between">
+        <div style="width:40px;">
+        </div>
+        <div style="font-size: 30px">
+          새 토론방 만들기
+        </div>
+        <div style="width:40px;">
+          <i id="close_modal" class="material-icons" style="font-size: 30px" type="button">close</i>
+        </div>
+      </div>
+      <div class="img_upload_space" style="background:gray; width:775px; height:500px; margin-top:10px;">
+        <div style="text-align: center;">
+        <span style="font-size:30px" > 이곳에 사진을 끌어다 놓으세요. </span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- 모달 2 -->
+  <div id="second_modal" class="modal_overlay">
+    <div class="modal_window">
+      <div style="display:flex; fex-direction: row; justify-content: space-between">
+        <div style="width:40px;">
+        </div>
+        <div style="font-size: 30px">
+          새 토론방 만들기
+        </div>
+        <div style="width:40px;">
+          <i id="close_modal2" class="material-icons" style="font-size: 30px" type="button">close</i>
+        </div>
+      </div>
+      <div style="display:flex; flex-direction: row;">
+        <div class="img_upload_space" style="background:#eeeeee; width:400px; height:400px; margin-top:10px;">
+          <div style="text-align: center; font-size: 20px;">대표 이미지</div>
+        </div>
+        <div style="margin-left:30px; margin-top:10px;">
+          <div><textarea name="title" id="input_title" rows="1" cols="25" placeholder="제목 부분입니다." maxlength="100"
+                         required style="font-size: 25px"></textarea>
+          </div>
+          <div><textarea name="title" id="input_stock" rows="1" cols="25" placeholder="종목번호를 적어보세요! but..해외주식은 지원되지 않습니다." maxlength="100"
+                         required style="font-size: 25px"></textarea>
+          </div>
+          <div>
+          <textarea name="title" id="input_content" rows="9" cols="25" placeholder="토론방 설명을 적어보세요! " maxlength="3000"
+                    required style="font-size: 25px"></textarea>
+          </div>
+          <button type="button" class="btn btn-outline-dark" id="publish_content" style="font-size: 15px; width:100%;">만들기</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+    <!-- Optional JavaScript; choose one of the two! -->
+<script>
+
+    $('#close_modal').on("click", () => {
+        location.reload();
+    });
+    $('#close_modal2').on("click", () => {
+        location.reload();
+    });
+
+    $('.go_home').on("click", () => {
+        location.replace('/');
+    });
+
+    function closeModal() {
+        $('.modal').css({
+            display: 'none'
+        });
+        $(document.body).css({
+            overflowY: 'visible'
+        });
+    };
+
+  $('#add_content').click(function () {
+    $('#first_modal').css({
+      display : 'flex'
+    });
+    $(document.body).css({
+      overflow : 'hidden'
+    });
+  });
+
+  $('.img_upload_space')
+    .on("dragover", dragOver)
+    .on("dragleave", dragOver)
+    .on("drop", uploadFiles);
+  function dragOver(e) {
+    e.stopPropagation();
+    e.preventDefault();
+    if (e.type == "dragover") {
+      $(e.target).css({
+          "background-color": "#eeeeee",
+          "outline-offset": "-20px"
+      });
+    } else {
+        $(e.target).css({
+            "background-color": "gray",
+            "outline-offset": "-10px"
+        });
+    }
+  }
+  let files;
+
+  function uploadFiles(e) {
+    e.stopPropagation();
+    e.preventDefault();
+    e.dataTransfer = e.originalEvent.dataTransfer;
+    files = e.dataTransfer.files;
+
+    if (files.length > 1) {
+        alert('하나의 이미지만 올려주세요..!');
+        return;
+    }
+    if (files[0].type.match(/image.*/)) {
+      $('#second_modal').css({
+      display : 'flex'
+      });
+
+    $('.img_upload_space').css({
+        "background-image": "url(" + window.URL.createObjectURL(files[0]) + ")",
+        "outline": "none",
+        "background-size": "100%",
+        "background-repeat": "no-repeat",
+    });
+    $('#first_modal').css({
+    display : 'none'
+    });
+    }else{
+    alert('이미지가 아닙니다.');
+    return;
+    }
+  };
+
+
+$('#publish_content').on('click', () => {
+        const image = files[0].name;
+        const title = $('#input_title').val();
+        const content = $('#input_content').val();
+        const stock = $('#input_stock').val();
+        const file = files[0];
+
+        let fd = new FormData();
+
+        fd.append('file', file);
+        fd.append('image', image);
+        fd.append('title', title);
+        fd.append('content', content);
+        fd.append('stock', stock);
+
+        if (image.length <= 0) {
+            alert("이미지가 비어있습니다.");
+        } else if (title.length <= 0) {
+            alert("제목을 입력하세요");
+        } else if (content.length <= 0) {
+            alert("내용을 입력하세요");
+        } else {
+            writeFeed(fd);
+            console.log(files[0]);
+        }
+    });
+
+    function writeFeed(fd) {
+        $.ajax({
+            url: "/create",
+            data: fd,
+            method: "POST",
+            processData: false,
+            contentType: false,
+            success: function (data) {
+                console.log("성공");
+            },
+            error: function (request, status, error) {
+                console.log("에러");
+            },
+            complete: function () {
+                console.log("무조건실행");
+                closeModal();
+                location.reload();
+            }
+        })
+    };
+
+</script>
+    <!-- Option 1: Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+
+    <!-- Option 2: Separate Popper and Bootstrap JS -->
+    <!--
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
+    -->
+  </body>
+</html>
