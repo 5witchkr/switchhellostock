@@ -1,1 +1,1 @@
-web: gunicorn sttalk.wsgi --log-file -
+web: gunicorn sttalk.wsgi --timeout 3000

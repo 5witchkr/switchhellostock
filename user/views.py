@@ -36,9 +36,6 @@ class Join(APIView):
         email = request.data.get('email', None)
         password = request.data.get('password', None)
         nickname = request.data.get('nickname', None)
-        print(email)
-        print(password)
-        print(nickname)
 
         if User.objects.filter(email=email).exists():
             return ErrorResponse('해당 이메일 주소가 존재합니다.')
