@@ -1,6 +1,9 @@
 venv/
+*.py[cod]
 __pycache__/
+.Python
 .env
 db.sqlite3
 .idea/
 /db_backup.sqlite3
+.DS_Store
